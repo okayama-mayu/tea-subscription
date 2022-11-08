@@ -10,7 +10,6 @@ class Subscription < ApplicationRecord
   enum status: { active: 0, cancelled: 1 }
   enum frequency: { biweekly: 0, monthly: 1, quaterly: 2 }
 
-  has_many :tea_subs
-  has_many :customer_subscriptions
-  has_many :customers, through: :customer_subscriptions
+  belongs_to :tea 
+  belongs_to :customer
 end
