@@ -11,7 +11,7 @@ RSpec.describe Tea, type: :model do
   end
 
   describe 'relationships' do 
-    it { should have_many :tea_subs }
-    it { should have_many(:subscriptions).through(:tea_subs) }
+    it { should have_many :subscriptions }
+    it { should have_many(:customers).through(:subscriptions) }
   end
 end
