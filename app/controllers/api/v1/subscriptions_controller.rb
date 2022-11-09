@@ -3,9 +3,9 @@ class Api::V1::SubscriptionsController < ApplicationController
     sub = Subscription.new(subscription_params)
 
     if sub.save 
-      render json: SubscriptionSerializer.format_subscription(sub)
+      render json: SubscriptionSerializer.format_subscription(sub), status: :ok 
     else 
-
+      render json: ErrorSerializer.format_error(error_message(sub.errors)), status: :unprocessable_entity
     end
   end
 
