@@ -10,7 +10,7 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def update
-    sub = Subscription.find(customer_params)
+    sub = Subscription.find(params[:id])
     begin 
       sub.update(subscription_params)
       render json: SubscriptionSerializer.format_subscription(sub), status: :ok
