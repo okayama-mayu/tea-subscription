@@ -69,7 +69,7 @@ RSpec.describe 'Subscriptions API' do
 
     nicole_earl_v2 = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 12, frequency: 2, tea_id: @earl.id, customer_id: @nicole.id)
     
-    get "/api/v1/subscriptions/#{@nicole_green.id}"
+    get "/api/v1/subscriptions/#{@nicole.id}"
 
     expect(response).to be_successful
 
@@ -81,15 +81,18 @@ RSpec.describe 'Subscriptions API' do
 
     subs.each do |subscription| 
       expect(subscription).to have_key :id 
-      expect(subscription[:id]).to be_a(String)
+      expect(subscription[:id]).to be_an(Integer)
+      
+      expect(subscription).to have_key :type 
+      expect(subscription[:type]).to eq 'subscription'
       
       expect(subscription).to have_key :attributes
       expect(subscription[:attributes][:title]).to be_a(String)
-      expect(subscription[:attributes][:price]).to be_a(String)
+      expect(subscription[:attributes][:price]).to be_an(Integer)
       expect(subscription[:attributes][:status]).to be_a(String)
       expect(subscription[:attributes][:frequency]).to be_a(String)
-      expect(subscription[:attributes][:tea_id]).to be_a(String)
-      expect(subscription[:attributes][:customer_id]).to be_a(String)
+      expect(subscription[:attributes][:tea_id]).to be_an(Integer)
+      expect(subscription[:attributes][:customer_id]).to be_an(Integer)
     end
   end
 end
