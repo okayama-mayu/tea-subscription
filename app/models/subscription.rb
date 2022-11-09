@@ -4,7 +4,7 @@ class Subscription < ApplicationRecord
   validates :price, numericality: true 
   validates_presence_of :status 
   validates_presence_of :frequency
-  validates :frequency, numericality: true 
+  # validates :frequency, numericality: true 
 
   enum status: { active: 0, cancelled: 1 }
   enum frequency: { biweekly: 0, monthly: 1, quaterly: 2, one_time: 3 }

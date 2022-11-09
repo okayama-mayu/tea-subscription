@@ -7,6 +7,8 @@ RSpec.describe 'Subscriptions API' do
 
     @green = Tea.create!(name: 'green', description: 'it is good', temperature: 95, brew_time: 3)
     @earl = Tea.create!(name: 'earl grey', description: 'it is strong', temperature: 80, brew_time: 4)
+
+    @nicole_green = Subscription.create!(title: 'Nicoles Green tea subscription', price: 10, frequency: 3, tea_id: @green.id, customer_id: @nicole.id)
   end
 
   it 'creates a Subscription' do 
@@ -32,10 +34,33 @@ RSpec.describe 'Subscriptions API' do
       title: '', price: 8, frequency: 1, tea_id: @green.id, customer_id: @mayu.id
     })
     headers = { "CONTENT_TYPE" => "application/json" }
-
+    
     post "/api/v1/subscriptions", headers: headers, params: JSON.generate(subscription: subs_params)
-
+    
     expect(response).to have_http_status(422)
     expect(response.body).to include("Title can't be blank")
+  end
+  
+  it 'cancels a subscription' do 
+    subs_params = { status: 1 }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/subscriptions/#{@nicole_green.id}", headers: headers, params: JSON.generate({subscription: subs_params})
+
+    updated = Subscription.last  
+    expect(response).to be_successful
+    expect(updated.status).to eq 'cancelled'
+  end
+
+  it 'throws an error if wrong input' do 
+    subs_params = { status: 2 }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/subscriptions/#{@nicole_green.id}", headers: headers, params: JSON.generate({subscription: subs_params})
+
+    updated = Subscription.last  
+    expect(response).to have_http_status(422)
+    expect(updated.status).to eq 'active'
+    expect(response.body).to include("'2' is not a valid status")
   end
 end
