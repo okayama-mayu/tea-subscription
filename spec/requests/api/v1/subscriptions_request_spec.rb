@@ -63,4 +63,47 @@ RSpec.describe 'Subscriptions API' do
     expect(updated.status).to eq 'active'
     expect(response.body).to include("'2' is not a valid status")
   end
+
+  it 'retrieves all subscriptions given a Customer id' do 
+    nicole_earl = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 8, frequency: 0, tea_id: @earl.id, customer_id: @nicole.id, status: 1)
+
+    nicole_earl_v2 = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 12, frequency: 2, tea_id: @earl.id, customer_id: @nicole.id)
+    
+    get "/api/v1/subscriptions/#{@nicole.id}"
+
+    expect(response).to be_successful
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    subs = response_body[:data]
+
+    expect(subs.count).to eq 3
+
+    subs.each do |subscription| 
+      expect(subscription).to have_key :id 
+      expect(subscription[:id]).to be_an(Integer)
+      
+      expect(subscription).to have_key :type 
+      expect(subscription[:type]).to eq 'subscription'
+      
+      expect(subscription).to have_key :attributes
+      expect(subscription[:attributes][:title]).to be_a(String)
+      expect(subscription[:attributes][:price]).to be_an(Integer)
+      expect(subscription[:attributes][:status]).to be_a(String)
+      expect(subscription[:attributes][:frequency]).to be_a(String)
+      expect(subscription[:attributes][:tea_id]).to be_an(Integer)
+      expect(subscription[:attributes][:customer_id]).to be_an(Integer)
+    end
+  end
+
+  it 'throws an error if nonexistent customer id is given when retrieving all subscriptions for a single user' do 
+    nicole_earl = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 8, frequency: 0, tea_id: @earl.id, customer_id: @nicole.id, status: 1)
+
+    nicole_earl_v2 = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 12, frequency: 2, tea_id: @earl.id, customer_id: @nicole.id)
+    
+    get "/api/v1/subscriptions/10000"
+
+    expect(response).to have_http_status(404)
+    expect(response.body).to include("Couldn't find Customer with 'id'=10000")
+  end
 end
