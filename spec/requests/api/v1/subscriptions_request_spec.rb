@@ -95,4 +95,15 @@ RSpec.describe 'Subscriptions API' do
       expect(subscription[:attributes][:customer_id]).to be_an(Integer)
     end
   end
+
+  it 'throws an error if nonexistent customer id is given when retrieving all subscriptions for a single user' do 
+    nicole_earl = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 8, frequency: 0, tea_id: @earl.id, customer_id: @nicole.id, status: 1)
+
+    nicole_earl_v2 = Subscription.create!(title: 'Nicoles Earl Grey tea subscription', price: 12, frequency: 2, tea_id: @earl.id, customer_id: @nicole.id)
+    
+    get "/api/v1/subscriptions/10000"
+
+    expect(response).to have_http_status(422)
+    expect(response.body).to include("Couldn't find Customer with 'id'=10000")
+  end
 end
