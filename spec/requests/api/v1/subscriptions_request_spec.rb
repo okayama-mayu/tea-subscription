@@ -8,7 +8,7 @@ RSpec.describe 'Subscriptions API' do
     @green = Tea.create!(name: 'green', description: 'it is good', temperature: 95, brew_time: 3)
     @earl = Tea.create!(name: 'earl grey', description: 'it is strong', temperature: 80, brew_time: 4)
 
-    @nicole_green = Subscription.create!(title: 'Nicoles Green tea subscription', price: 10, frequency: 3, tea_id: green.id, customer_id: nicole.id)
+    @nicole_green = Subscription.create!(title: 'Nicoles Green tea subscription', price: 10, frequency: 3, tea_id: @green.id, customer_id: @nicole.id)
   end
 
   it 'creates a Subscription' do 
@@ -46,8 +46,8 @@ RSpec.describe 'Subscriptions API' do
     headers = { "CONTENT_TYPE" => "application/json" }
 
     patch "/api/v1/subscriptions/#{@nicole_green.id}", headers: headers, params: JSON.generate({subscription: subs_params})
-
+    updated = Subscription.last  
     expect(response).to be_successful
-    expect(response.status).to eq 'cancelled'
+    expect(updated.status).to eq 'cancelled'
   end
 end
