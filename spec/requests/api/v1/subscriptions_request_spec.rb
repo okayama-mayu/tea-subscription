@@ -22,7 +22,7 @@ RSpec.describe 'Subscriptions API' do
     expect(response).to be_successful 
     expect(created_sub.title).to eq(subs_params[:title])
     expect(created_sub.price).to eq(subs_params[:price])
-    expect(created_sub.frequency).to eq(subs_params[:frequency])
+    expect(created_sub.frequency).to eq('monthly')
     expect(created_sub.tea_id).to eq(subs_params[:tea_id])
     expect(created_sub.customer_id).to eq(subs_params[:customer_id])
   end
