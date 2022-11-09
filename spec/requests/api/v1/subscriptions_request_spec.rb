@@ -103,7 +103,7 @@ RSpec.describe 'Subscriptions API' do
     
     get "/api/v1/subscriptions/10000"
 
-    expect(response).to have_http_status(422)
+    expect(response).to have_http_status(404)
     expect(response.body).to include("Couldn't find Customer with 'id'=10000")
   end
 end

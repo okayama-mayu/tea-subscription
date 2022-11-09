@@ -20,10 +20,13 @@ class Api::V1::SubscriptionsController < ApplicationController
   end
 
   def show
-    # begin 
+    begin 
       customer = Customer.find(params[:id])
       subs = customer.subscriptions 
       render json: SubscriptionsSerializer.format_subscriptions(subs), status: :ok 
+    rescue StandardError => e 
+      render json: ErrorSerializer.format_error(e.message), status: :not_found 
+    end 
   end
 
   private 
