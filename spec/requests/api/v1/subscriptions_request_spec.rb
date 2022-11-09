@@ -26,4 +26,17 @@ RSpec.describe 'Subscriptions API' do
     expect(created_sub.tea_id).to eq(subs_params[:tea_id])
     expect(created_sub.customer_id).to eq(subs_params[:customer_id])
   end
+
+  it 'throws an error if incorrect params' do 
+    binding.pry 
+    subs_params = ({
+      title: 'Mayus Green Tea Subscription', price: , frequency: 1, tea_id: @green.id, customer_id: @mayu.id
+    })
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    post "/api/v1/subscriptions", headers: headers, params: JSON.generate(subscription: subs_params)
+
+    expect(response).to have_http_status(422)
+    expect(response.body).to include("Validation failed: Price can't be blank")
+  end
 end
