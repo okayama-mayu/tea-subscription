@@ -11,8 +11,12 @@ class Api::V1::SubscriptionsController < ApplicationController
 
   def update
     sub = Subscription.find(params[:id])
-    sub.update!(subscription_params)
-    render json: SubscriptionSerializer.format_subscription(sub), status: :ok
+    begin 
+    sub.update(subscription_params)
+      render json: SubscriptionSerializer.format_subscription(sub), status: :ok
+    rescue StandardError => e
+      render json: ErrorSerializer.format_error(e.message), status: :unprocessable_entity
+    end 
   end
 
   private 

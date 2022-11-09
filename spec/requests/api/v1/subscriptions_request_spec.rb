@@ -46,8 +46,21 @@ RSpec.describe 'Subscriptions API' do
     headers = { "CONTENT_TYPE" => "application/json" }
 
     patch "/api/v1/subscriptions/#{@nicole_green.id}", headers: headers, params: JSON.generate({subscription: subs_params})
+
     updated = Subscription.last  
     expect(response).to be_successful
     expect(updated.status).to eq 'cancelled'
+  end
+
+  it 'throws an error if wrong input' do 
+    subs_params = { status: 2 }
+    headers = { "CONTENT_TYPE" => "application/json" }
+
+    patch "/api/v1/subscriptions/#{@nicole_green.id}", headers: headers, params: JSON.generate({subscription: subs_params})
+
+    updated = Subscription.last  
+    expect(response).to have_http_status(422)
+    expect(updated.status).to eq 'active'
+    expect(response.body).to include("'2' is not a valid status")
   end
 end
