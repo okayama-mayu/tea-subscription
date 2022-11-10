@@ -36,3 +36,95 @@ This project requires:
 
 ### Subscribe a Customer to a Tea Subscription 
 - `post "/api/v1/subscriptions"`
+
+Example Body (in raw JSON format): 
+``` 
+{
+    "title": "Mayus Green Tea Subscription",
+    "price": "8",
+    "frequency": "monthly", 
+    "tea_id": "1", 
+    "customer_id": "1"
+}
+``` 
+
+Example Response: 
+```
+{
+    "data": {
+        "id": 2,
+        "type": "subscription",
+        "attributes": {
+            "title": "Mayus Green Tea Subscription",
+            "price": 8,
+            "status": "active",
+            "frequency": "monthly",
+            "tea_id": 1,
+            "customer_id": 1
+        }
+    }
+}
+```
+
+### Change a Customer's Subscription Status (active or cancelled)  
+- `patch "/api/v1/subscriptions/{{:subscription_id}}"`
+
+Example Body (in raw JSON format): 
+``` 
+{
+    "status": "cancelled"
+}
+``` 
+
+Example Response: 
+```
+{
+    "data": {
+        "id": 1,
+        "type": "subscription",
+        "attributes": {
+            "title": "Nicoles Green tea subscription",
+            "price": 10,
+            "status": "cancelled",
+            "frequency": "one_time",
+            "tea_id": 1,
+            "customer_id": 2
+        }
+    }
+}
+```
+
+### Retrieve All Subscriptions (Active and Cancelled) Associated with a Customer
+- `get "/api/v1/subscriptions/{{:customer_id}}"`
+
+Example Response: 
+```
+{
+    "data": [
+        {
+            "id": 1,
+            "type": "subscription",
+            "attributes": {
+                "title": "Nicoles Green tea subscription",
+                "price": 10,
+                "status": "active",
+                "frequency": "one_time",
+                "tea_id": 1,
+                "customer_id": 2
+            }
+        },
+        {
+            "id": 2,
+            "type": "subscription",
+            "attributes": {
+                "title": "Nicole's Earl Grey Tea Subscription",
+                "price": 12,
+                "status": "cancelled",
+                "frequency": "biweekly",
+                "tea_id": 2,
+                "customer_id": 2
+            }
+        }
+    ]
+}
+```
