@@ -131,3 +131,6 @@ Example Response:
     ]
 }
 ```
+## Test Coverage
+This application was developed using TDD through RSpec with 100% coverage as measured by Simplecov. 
+<img width="1434" alt="image" src="https://user-images.githubusercontent.com/102258223/201003253-314491a1-a386-46eb-9c5c-dc4826deaf26.png">
