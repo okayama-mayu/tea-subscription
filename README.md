@@ -31,6 +31,9 @@ This project requires:
    * `bundle install`
    * `rails db:create`
    * `rails db:migrate`
+
+## Schema
+<img width="750" alt="image" src="https://user-images.githubusercontent.com/102258223/201002392-1d4fc9ad-fb20-4842-8764-59f2697ed326.png">
    
 ## Endpoints
 
